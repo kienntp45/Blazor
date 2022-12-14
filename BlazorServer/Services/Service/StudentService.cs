@@ -15,7 +15,7 @@ namespace BlazorServer.Services.Service
             _mapper         = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
-        public List<ViewStudentMark> Get(int? id)
+        public async Task<List<ViewStudentMark>> Get(int? id)
         {
             var lstStu  = _studentService.Get();
             var lstMark = _markService.Get();
@@ -33,9 +33,9 @@ namespace BlazorServer.Services.Service
             return data;
         }
 
-        public List<ViewStudentMark> GetAll()
+        public async Task<List<ViewStudentMark>> GetAll()
         {
-            var lstStu = _studentService.Get();
+            var lstStu  = _studentService.Get();
             var lstMark = _markService.Get();
 
             var data = (from a in lstStu

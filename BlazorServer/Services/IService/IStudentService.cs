@@ -2,9 +2,9 @@
 
 public interface IStudentService
 {
-    public List<ViewStudentMark> Get(int? id);
+    public Task<List<ViewStudentMark>> Get(int? id);
     public string Add(ViewStu entity);
     public string Update(Students entity);
     public string Delete(int id);
-    public List<ViewStudentMark> GetAll();
+    public Task<List<ViewStudentMark>> GetAll();
 }

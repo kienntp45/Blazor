@@ -1,4 +1,4 @@
-﻿namespace BlazorServer.ViewModels;
+﻿namespace BlazorModel.ViewModels;
 
 public class ViewStudentMark
 {

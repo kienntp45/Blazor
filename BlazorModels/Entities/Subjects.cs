@@ -1,6 +1,6 @@
 ﻿#nullable disable
 
-namespace BlazorServer.Data.Entities
+namespace BlazorModel.Data.Entities
 {
     public class Subjects
     {
