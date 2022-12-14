@@ -6,3 +6,4 @@ global using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 global using BlazorWeb.Services.StudentService;
 global using BlazorWeb.Extension;
 global using System.Net.Http.Json;
+global using BlazorStrap;

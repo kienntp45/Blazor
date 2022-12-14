@@ -21,10 +21,32 @@ else
             @foreach (var stu in students)
             {
                 <tr>
-                   <td>@stu.Student.Name</td>
-                   <td>@stu.Student.DOB</td>
-                   <td>@stu.Student.Gender</td>
-                   <td>@stu.Student.Status</td>
+                    <td>@stu.Student.Name</td>
+                    <td>@stu.Student.DOB</td>
+                    <td>
+                        @{
+                            if (stu.Student.Gender == 1)
+                            {
+                                <p>Nam</p>
+                            }
+                            else
+                            {
+                                <p>Nữ</p>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (stu.Student.Status)
+                            {
+                                <p>Hoạt động</p>
+                            }
+                            else
+                            {
+                                <p>Không hoạt đôngj</p>
+                            }
+                        }
+                    </td>
                 </tr>
             }
         </tbody>
@@ -37,6 +59,6 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-         students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("api/Stu/get-all");
+         students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("/api/Stu/get-all");
     }
 }

@@ -26,30 +26,30 @@ public class StuController : ControllerBase
     }
 
     [HttpGet("get-student-by-id")]
-    public IActionResult Get(int? id)
+    public async Task<List<ViewStudentMark>> Get(int? id)
     {
         try
         {
-           var rs = _stuService.Get(id);
-            return Ok(rs);
+           var rs =await _stuService.Get(id);
+            return rs;
         }
         catch (Exception e)
         {
-            return BadRequest(e.ToString());
+            throw;
         } 
     }
 
     [HttpGet("get-all")]
-    public IActionResult GetAll()
+    public async Task<List<ViewStudentMark>> GetAll()
     {
         try
         {
-            var rs = _stuService.GetAll();
-            return Ok(rs);
+            var rs =await _stuService.GetAll();
+            return rs;
         }
         catch (Exception e)
         {
-            return BadRequest(e.ToString());
+            throw;
         }
     }
 
