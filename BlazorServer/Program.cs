@@ -7,12 +7,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDI(builder.Configuration);
+builder.Services.AddScoped<DbInitializer>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseItToSeedSqlServer();
 
 app.UseHttpsRedirection();
 

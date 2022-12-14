@@ -1,4 +1,6 @@
-﻿namespace BlazorServer.Data
+﻿#nullable disable
+
+namespace BlazorServer.Data
 {
     public class BlazorContext : DbContext
     {

@@ -25,7 +25,7 @@ public class StuController : ControllerBase
         }
     }
 
-    [HttpGet("get-stuent-by-id")]
+    [HttpGet("get-student-by-id")]
     public IActionResult Get(int? id)
     {
         try

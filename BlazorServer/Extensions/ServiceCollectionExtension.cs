@@ -14,5 +14,15 @@
             service.AddAutoMapper(typeof(PorfileMapping));
             return service;
         }
+
+        public static IApplicationBuilder UseItToSeedSqlServer(this IApplicationBuilder app)
+        {
+            ArgumentNullException.ThrowIfNull(app, nameof(app));
+            using var scope = app.ApplicationServices.CreateScope();
+            var services = scope.ServiceProvider;
+            var context = services.GetRequiredService<BlazorContext>();
+            DbInitializer.Initialize(context);
+            return app;
+        }
     }
 }
