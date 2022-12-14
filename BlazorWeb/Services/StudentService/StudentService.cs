@@ -1,4 +1,6 @@
-﻿namespace BlazorWeb.Services.StudentService
+﻿#nullable disable 
+
+namespace BlazorWeb.Services.StudentService
 {
     public class StudentService : IStudentService
     { 

@@ -9,12 +9,21 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDI(builder.Configuration);
 builder.Services.AddScoped<DbInitializer>();
 
+var cross = "myCross";
+
+builder.Services.AddCors(option =>
+    option.AddPolicy(name: cross,
+    policy =>
+        policy.WithOrigins("*").WithMethods("GET", "PUT", "POST", "DELETE").AllowAnyMethod().AllowAnyHeader()
+));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
 
+app.UseCors(cross);
 app.UseItToSeedSqlServer();
 
 app.UseHttpsRedirection();

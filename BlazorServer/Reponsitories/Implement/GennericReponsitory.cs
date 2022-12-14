@@ -1,4 +1,6 @@
-﻿namespace BlazorServer.Reponsitories.Implement;
+﻿#nullable disable
+
+namespace BlazorServer.Reponsitories.Implement;
 
 public class GennericReponsitory<T> : IGennericReponsitory<T> where T : class
 {

@@ -11,19 +11,20 @@ else
       <table class="table">
         <thead>
             <tr>
-                <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Name</th>
+                <th>DOB</th>
+                <th>Gender</th>
+                <th>Status</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var stu in students)
             {
                 <tr>
-                  @*  <td>@stu.TemperatureC</td>
-                    <td>@stu.TemperatureF</td>
-                    <td>@stu.Summary</td>*@
+                   <td>@stu.Student.Name</td>
+                   <td>@stu.Student.DOB</td>
+                   <td>@stu.Student.Gender</td>
+                   <td>@stu.Student.Status</td>
                 </tr>
             }
         </tbody>
@@ -31,10 +32,11 @@ else
 }
 
 @code {
-    List<ViewStudentMark>? students;
+    #nullable disable
+    List<ViewStudentMark> students;
 
     protected override async Task OnInitializedAsync()
     {
-         students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("/get-all");
+         students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("api/Stu/get-all");
     }
 }
