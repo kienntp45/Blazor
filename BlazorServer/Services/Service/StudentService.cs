@@ -29,8 +29,13 @@ namespace BlazorServer.Services.Service
                             Student = a,
                             Mark = (b != null ? b : null)
                         }).ToList();
-
             return data;
+        }
+
+        public async Task<Students> FindStudnetByIdAsync(int? id)
+        {
+            var student = _studentService.Get().FirstOrDefault(c => c.ID == id);
+            return student;
         }
 
         public async Task<List<ViewStudentMark>> GetAll()
@@ -53,6 +58,8 @@ namespace BlazorServer.Services.Service
         public string Add(ViewStu entity)
         {
             var stu = _mapper.Map<Students>(entity);
+            stu.DOB = entity.Birthday;
+            stu.Status = true;
             _studentService.Add(stu);
             return "success";
         }
@@ -69,7 +76,8 @@ namespace BlazorServer.Services.Service
             var stu    = lstStu.FirstOrDefault(p => p.ID == id);
 
             if (stu == null) return "error";
-            _studentService.Delete(stu);
+            stu.Status = false;
+            _studentService.Update(stu);
             return "success";
         }
     }

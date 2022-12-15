@@ -1,4 +1,6 @@
-﻿namespace BlazorServer.Controllers;
+﻿#nullable disable
+
+namespace BlazorServer.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -12,7 +14,7 @@ public class StuController : ControllerBase
     }
 
     [HttpPost("add-student")]
-    public IActionResult add(ViewStu viewStu)
+    public IActionResult add([FromBody]ViewStu viewStu)
     {
         try
         {
@@ -26,14 +28,14 @@ public class StuController : ControllerBase
     }
 
     [HttpGet("get-student-by-id")]
-    public async Task<List<ViewStudentMark>> Get(int? id)
+    public async Task<List<ViewStudentMark>> Get([FromQuery]int? id)
     {
         try
         {
            var rs =await _stuService.Get(id);
             return rs;
         }
-        catch (Exception e)
+        catch (Exception )
         {
             throw;
         } 
@@ -53,8 +55,22 @@ public class StuController : ControllerBase
         }
     }
 
+    [HttpGet("find-student-by-id")]
+    public async Task<Students> FindStudnetByIdAsync([FromQuery]int? id)
+    {
+        try
+        {
+            var rs = await _stuService.FindStudnetByIdAsync(id);
+            return rs;
+        }
+        catch (Exception e)
+        {
+            throw;
+        }
+    }
+
     [HttpPut("sua-student")]
-    public IActionResult UpdateStuent(Students student)
+    public IActionResult UpdateStuent([FromBody]Students student)
     {
         try
         {
@@ -68,7 +84,7 @@ public class StuController : ControllerBase
     }
 
     [HttpDelete("delete-student")]
-    public IActionResult DeleteStuentByID(int id)
+    public IActionResult DeleteStuentByID([FromQuery]int id)
     {
         try
         {

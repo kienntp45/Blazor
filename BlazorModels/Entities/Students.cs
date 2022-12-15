@@ -4,7 +4,7 @@ namespace BlazorModel.Data.Entities
 {
     public class Students
     {
-        public int      ID {     get; set; }
+        public int      ID       { get; set; }
         public string   Name     { get; set; }
         public string   Account  { get; set; }
         public string   Password { get; set; }
