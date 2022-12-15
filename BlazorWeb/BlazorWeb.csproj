@@ -17,4 +17,8 @@
     <ProjectReference Include="..\BlazorModels\BlazorModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\template\" />
+  </ItemGroup>
+
 </Project>

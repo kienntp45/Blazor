@@ -6,6 +6,6 @@ public interface IStudentService
     public string Add(ViewStu entity);
     public string Update(Students entity);
     public string Delete(int id);
-    public Task<List<ViewStudentMark>> GetAll();
+    public Task<List<ViewStudentMark>> GetAll(Paging page);
     Task<Students> FindStudnetByIdAsync(int? id);
 }

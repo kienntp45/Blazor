@@ -11,3 +11,4 @@ global using BlazorServer.Services.Service;
 global using BlazorServer.ViewModels;
 global using Microsoft.AspNetCore.Mvc;
 global using Microsoft.EntityFrameworkCore;
+global using BlazorModels.ViewModels;

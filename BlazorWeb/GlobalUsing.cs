@@ -7,3 +7,4 @@ global using BlazorWeb.Services.StudentService;
 global using BlazorWeb.Extension;
 global using System.Net.Http.Json;
 global using BlazorStrap;
+global using BlazorModels.ViewModels;

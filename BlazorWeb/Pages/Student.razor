@@ -3,7 +3,7 @@
 @inject NavigationManager _navigationManager
 <h3>Student</h3>
 
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="update" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
     <div class="modal-dialog" style="width: 51%;max-width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -58,36 +58,45 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+@if (StudentID != null)
+{
+    <div class="modal fade" id="delete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="width: 51%;max-width: 80%;">
         <div class="modal-content">
-            <div class="modal-header">
+         <EditForm Model="StudentID" OnSubmit="Delete">
+                <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Xác nhận</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <p>Bạn có chắc chắn muốn xóa</p>
+                    <p>Bạn có chắc chắn muốn xóa tài khoản @StudentID.Name</p>
                 </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="javascript:window.location.reload()">Xóa</button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Xóa</button>
             </div>
+         </EditForm>
         </div>
     </div>
 </div>
+}
 
 @if (students == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 }
 else
 {
+    int stt = 0;
     <table class="table">
         <thead>
             <tr>
+                <th>STT</th>
                 <th>Name</th>
                 <th>DOB</th>
                 <th>Gender</th>
@@ -99,17 +108,18 @@ else
             @foreach (var stu in students)
             {
                 <tr>
+                    <td>@(stt++)</td>
                     <td>@stu.Student.Name</td>
                     <td>@stu.Student.DOB</td>
                     <td>
                         @{
                             if (stu.Student.Gender == 1)
                             {
-                                <p>Nam</p>
+                                    <p>Nam</p>
                             }
                             else
                             {
-                                <p>Nữ</p>
+                                    <p>Nữ</p>
                             }
                         }
                     </td>
@@ -117,28 +127,61 @@ else
                         @{
                             if (stu.Student.Status)
                             {
-                                <p>Hoạt động</p>
+                                    <p>Hoạt động</p>
                             }
                             else
                             {
-                                <p>Không hoạt động</p>
+                                    <p>Nghỉ học</p>
                             }
                         }
                     </td>
                     <td>
-                        <button type="button" class="btn btn-success" @onclick="(()=>showStudent(stu.Student.ID))" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                            Sửa
-                        </button>
-
-                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">
-                            Xóa
-                        </button>
+                        <div>
+                            <button type="button" class="btn btn-success" style="margin-right: 5px" @onclick="(()=>showStudent(stu.Student.ID))" data-bs-toggle="modal" data-bs-target="#update">Sửa</button>
+                            @{
+                                if (stu.Student.Status)
+                                {
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" @onclick="(()=>GetStuentID(stu.Student))" data-bs-target="#delete">Xóa</button>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" @onclick="(()=>GetStuentID(stu.Student))" data-bs-target="#delete" disabled> Xóa </button>
+                                }
+                            }
+                        </div>
                     </td>
                 </tr>
             }
-        </tbody>
+        </tbody>    
     </table>
-
+    <div aria-label="Page navigation example" class="col-8 offset-4">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link"  aria-label="Previous"  @onclick="(()=>GetPage(Page-1))">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            @{
+                if (Page > 1)
+                {
+                    <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page-1))">@(Page-1)</a></li>
+                    <li class="page-item"><a class="page-link text-danger" @onclick="(()=>GetPage(Page))">@Page</a></li>
+                    <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page+1))">@(Page+1)</a></li>
+                }
+                else
+                {
+                    Page = 1;
+                    <li class="page-item"><a class="page-link text-danger" @onclick="(()=>GetPage(Page))">@Page</a></li>
+                    <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page+1))">@(Page+1)</a></li>
+                }
+            }
+            <li class="page-item">
+                <a class="page-link" aria-label="Next" @onclick="(()=>GetPage(Page+1))">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </div>
 }
 @code {
     #nullable disable
@@ -147,10 +190,18 @@ else
 
     public BlazorModel.Data.Entities.Students student = new BlazorModel.Data.Entities.Students();
 
+    public BlazorModel.Data.Entities.Students StudentID = new BlazorModel.Data.Entities.Students();
+
+    [Parameter]
+    public int Page { get; set; } = 1;
+    [Parameter]
+    public string Search { get; set; }
+
+
     protected override async Task OnInitializedAsync()
     {
         //student  = await Http.GetFromJsonAsync<Student>("/api/Stu/find-student-by-id/{}");
-        students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("/api/Stu/get-all");
+        students = await Http.GetFromJsonAsync<List<ViewStudentMark>>($"/api/Stu/get-all?page1={Page}&name={Search}");
     }
 
     async void showStudent(int? id)
@@ -158,9 +209,20 @@ else
         student = await Http.GetFromJsonAsync<BlazorModel.Data.Entities.Students>("/api/Stu/find-student-by-id/?id=" + id);
     }
 
-     async void Delete(int? id)
+    async Task Delete()
     {
-        await Http.DeleteAsync("/api/Stu/delete-student/?id=" + id);
+        await Http.DeleteAsync("/api/Stu/delete-student/?id=" + StudentID.ID);
+    }
+
+    async Task GetPage(int page)
+    {
+        Page = page;
+        await OnInitializedAsync();
+    }
+
+    async void GetStuentID(BlazorModel.Data.Entities.Students student)
+    {
+        StudentID = student;
     }
 
     async Task Update()

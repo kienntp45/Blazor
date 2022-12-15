@@ -1,5 +1,6 @@
 ﻿#nullable disable
 
+
 namespace BlazorServer.Services.Service
 {
     public class StudentService : IStudentService
@@ -38,11 +39,11 @@ namespace BlazorServer.Services.Service
             return student;
         }
 
-        public async Task<List<ViewStudentMark>> GetAll()
+        public async Task<List<ViewStudentMark>> GetAll(Paging page)
         {
-            var lstStu  = _studentService.Get();
+            var lstStu = _studentService.Get();
             var lstMark = _markService.Get();
-
+            if (page.Page < 1) page.Page = 1;
             var data = (from a in lstStu
                         join b in lstMark on a.ID equals b.StudentId into k
                         from b in k.DefaultIfEmpty()
@@ -50,9 +51,24 @@ namespace BlazorServer.Services.Service
                         {
                             Student = a,
                             Mark = (b != null ? b : null)
-                        }).ToList();
-
-            return data;
+                        }).ToList().OrderBy(x => !x.Student.Status ? 1 : 0);
+            var rs = new List<ViewStudentMark>();
+            if (page.Name != null)
+            {
+                  rs = data
+                 .Where(n => n.Student.Name.Trim().Contains(page.Name) )
+                .Skip((page.Page - 1) * 10)
+                .Take(10).Select(c => c)
+                .ToList();
+            }
+            else
+            {
+               rs = data
+               .Skip((page.Page - 1) * 10)
+               .Take(10).Select(c => c)
+               .ToList();
+            }
+            return rs;
         }
 
         public string Add(ViewStu entity)

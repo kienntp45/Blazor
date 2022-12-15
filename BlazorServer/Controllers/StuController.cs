@@ -42,11 +42,12 @@ public class StuController : ControllerBase
     }
 
     [HttpGet("get-all")]
-    public async Task<List<ViewStudentMark>> GetAll()
+    public async Task<List<ViewStudentMark>> GetAll([FromQuery] int page1, [FromQuery] string name)
     {
         try
         {
-            var rs =await _stuService.GetAll();
+            var page = new Paging() { Name = name, Page = page1};
+            var rs =await _stuService.GetAll(page);
             return rs;
         }
         catch (Exception e)
