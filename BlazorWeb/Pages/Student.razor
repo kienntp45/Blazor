@@ -2,19 +2,72 @@
 @inject HttpClient Http
 <h3>Student</h3>
 
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 51%;max-width: 80%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form class="form-horizontal">
+
+                        <div class="form-group">
+                            <label for="name" class="col-sm-2 control-label">Tên</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="name" placeholder="Name">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="DOB" class="col-sm-2 control-label">Ngày sinh</label>
+                            <div class="col-sm-10">
+                                <input type="date" class="form-control" id="DOB" placeholder="Ngày sinh">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="Gender" class="col-sm-2 control-label">Giới tính</label>
+                               <div class="col-sm-10">
+                                <input type="radio" name="gender" value="male"> Male
+                                <input type="radio" name="gender" value="female"> Female
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="status" class="col-sm-2 control-label">Trang thái</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="status" value="true" disabled>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @if (students == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-      <table class="table">
+    <table class="table">
         <thead>
             <tr>
                 <th>Name</th>
                 <th>DOB</th>
                 <th>Gender</th>
                 <th>Status</th>
+                <th>Tùy chọn</th>
             </tr>
         </thead>
         <tbody>
@@ -47,6 +100,11 @@ else
                             }
                         }
                     </td>
+                    <td>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Detail
+                        </button>
+                    </td>
                 </tr>
             }
         </tbody>
@@ -54,11 +112,11 @@ else
 }
 
 @code {
-    #nullable disable
+#nullable disable
     List<ViewStudentMark> students;
 
     protected override async Task OnInitializedAsync()
     {
-         students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("/api/Stu/get-all");
+        students = await Http.GetFromJsonAsync<List<ViewStudentMark>>("/api/Stu/get-all");
     }
 }
