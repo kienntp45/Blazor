@@ -3,7 +3,9 @@
 @inject NavigationManager _navigationManager
 <h3>Student</h3>
 
-<div class="modal fade" id="update" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+@if (student != null)
+{
+    <div class="modal fade" id="update" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
     <div class="modal-dialog" style="width: 51%;max-width: 80%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -14,6 +16,15 @@
                 <div class="container-fluid">
 
                     <EditForm Model="@student" OnSubmit="Update"  class="form-horizontal" >
+                         <div class="form-group">
+                            <div class="col-sm-10">
+                                <img src="@student.Image" class="rounded-circle" style="width: 150px;"alt="Avatar" />
+                            </div>
+                        </div>
+                            <div class="form-group mb-3">
+                                <label for="formFile" class="form-label">Default file input example</label>
+                                <input class="form-control" type="file" id="formFile" >
+                            </div>
                         <div class="form-group">
                             <label for="name" class="col-sm-2 control-label">Tên</label>    
                             <div class="col-sm-10">
@@ -41,13 +52,13 @@
                         <div class="form-group">
                             <label for="status" class="col-sm-2 control-label">Trang thái</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="status" value="@(student.Status.ToString() == "True" ? "ok": "thoi")" disabled>
+                                <input type="text" class="form-control" id="status" value="@(student.Status.ToString() == "True" ? "Hoạt động": "Nghỉ học")" disabled>
                             </div>
                         </div>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" onclick="javascript:window.location.reload()" >Lưu</button>
+                            <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" @onclick="(()=>SearchStudent())" >Lưu</button>
                         </div>
                     </EditForm>
 
@@ -57,6 +68,7 @@
         </div>
     </div>
 </div>
+}
 
 @if (StudentID != null)
 {
@@ -93,14 +105,28 @@
 else
 {
     int stt = 0;
+    <div class="row">
+        <div class="col-md-5 mx-auto">
+            <div class="input-group">
+                <input class="form-control border-end-0 border rounded-pill" type="search" id="example-search-input" @bind="Search">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" @onclick="(()=>SearchStudent())" type="button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <table class="table">
         <thead>
             <tr>
                 <th>STT</th>
-                <th>Name</th>
-                <th>DOB</th>
-                <th>Gender</th>
-                <th>Status</th>
+                <th>Img</th>
+                <th>Tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Trạng thái</th>
                 <th>Tùy chọn</th>
             </tr>
         </thead>
@@ -109,17 +135,18 @@ else
             {
                 <tr>
                     <td>@(stt++)</td>
+                    <td><img src="@stu.Student.Image" alt="#Value" style="width: 15%; height: 25%" /></td>
                     <td>@stu.Student.Name</td>
                     <td>@stu.Student.DOB</td>
                     <td>
                         @{
                             if (stu.Student.Gender == 1)
                             {
-                                    <p>Nam</p>
+                                        <p>Nam</p>
                             }
                             else
                             {
-                                    <p>Nữ</p>
+                                        <p>Nữ</p>
                             }
                         }
                     </td>
@@ -127,11 +154,11 @@ else
                         @{
                             if (stu.Student.Status)
                             {
-                                    <p>Hoạt động</p>
+                                        <p>Hoạt động</p>
                             }
                             else
                             {
-                                    <p>Nghỉ học</p>
+                                        <p>Nghỉ học</p>
                             }
                         }
                     </td>
@@ -141,11 +168,11 @@ else
                             @{
                                 if (stu.Student.Status)
                                 {
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" @onclick="(()=>GetStuentID(stu.Student))" data-bs-target="#delete">Xóa</button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" @onclick="(()=>GetStuentID(stu.Student))" data-bs-target="#delete">Xóa</button>
                                 }
                                 else
                                 {
-                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" @onclick="(()=>GetStuentID(stu.Student))" data-bs-target="#delete" disabled> Xóa </button>
+                                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" @onclick="(()=>GetStuentID(stu.Student))" data-bs-target="#delete" disabled> Xóa </button>
                                 }
                             }
                         </div>
@@ -164,15 +191,15 @@ else
             @{
                 if (Page > 1)
                 {
-                    <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page-1))">@(Page-1)</a></li>
-                    <li class="page-item"><a class="page-link text-danger" @onclick="(()=>GetPage(Page))">@Page</a></li>
-                    <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page+1))">@(Page+1)</a></li>
+                        <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page-1))">@(Page-1)</a></li>
+                        <li class="page-item"><a class="page-link text-danger" @onclick="(()=>GetPage(Page))">@Page</a></li>
+                        <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page+1))">@(Page+1)</a></li>
                 }
                 else
                 {
                     Page = 1;
-                    <li class="page-item"><a class="page-link text-danger" @onclick="(()=>GetPage(Page))">@Page</a></li>
-                    <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page+1))">@(Page+1)</a></li>
+                        <li class="page-item"><a class="page-link text-danger" @onclick="(()=>GetPage(Page))">@Page</a></li>
+                        <li class="page-item"><a class="page-link" @onclick="(()=>GetPage(Page+1))">@(Page+1)</a></li>
                 }
             }
             <li class="page-item">
@@ -212,12 +239,18 @@ else
     async Task Delete()
     {
         await Http.DeleteAsync("/api/Stu/delete-student/?id=" + StudentID.ID);
+        await OnInitializedAsync();
     }
 
     async Task GetPage(int page)
     {
         Page = page;
         await OnInitializedAsync();
+    }
+
+    async Task SearchStudent()
+    {
+       await OnInitializedAsync();
     }
 
     async void GetStuentID(BlazorModel.Data.Entities.Students student)
@@ -228,6 +261,7 @@ else
     async Task Update()
     {
         await Http.PutAsJsonAsync<BlazorModel.Data.Entities.Students>("/api/Stu/sua-student", student);
+        await OnInitializedAsync();
     }   
 
      void NevigateToYourUrl()

@@ -10,6 +10,7 @@ namespace BlazorModel.Data.Entities
         public string   Password { get; set; }
         public DateTime DOB      { get; set; }
         public int      Gender   { get; set; }
+        public string   Image   { get; set; }
         public bool     Status   { get; set; }
 
         public ICollection<Marks> Marks { get; set; }

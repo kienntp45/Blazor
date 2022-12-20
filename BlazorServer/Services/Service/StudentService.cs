@@ -76,12 +76,16 @@ namespace BlazorServer.Services.Service
             var stu = _mapper.Map<Students>(entity);
             stu.DOB = entity.Birthday;
             stu.Status = true;
+            if (stu.Gender == 1) stu.Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-vWqC59iaOyq1jAeqkEaf0gXksGYCz6pCNQ&usqp=CAU";
+            else stu.Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYEoUhZh-z9j6vsSb3tQQ-4eQC0FYv-Zcj4w&usqp=CAU";
             _studentService.Add(stu);
             return "success";
         }
 
         public string Update(Students entity)
         {
+            if (entity.Gender == 1) entity.Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-vWqC59iaOyq1jAeqkEaf0gXksGYCz6pCNQ&usqp=CAU";
+            else entity.Image = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYEoUhZh-z9j6vsSb3tQQ-4eQC0FYv-Zcj4w&usqp=CAU";
             _studentService.Update(entity);
             return "success";
         }

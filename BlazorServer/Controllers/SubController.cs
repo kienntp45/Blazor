@@ -41,16 +41,15 @@ public class SubController : ControllerBase
     }
 
     [HttpGet("get-all-subject")]
-    public IActionResult GetAll()
+    public List<ViewSubStuMark> GetAll()
     {
         try
         {
             var rs = _subjectService.GetAll();
-            return Ok(rs);
+            return rs;
         }
         catch (Exception)
         {
-
             throw;
         }
     }

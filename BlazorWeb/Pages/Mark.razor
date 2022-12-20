@@ -1,0 +1,96 @@
+﻿@page "/mark"
+@using BlazorServer.ViewModels
+@inject HttpClient Http
+@inject NavigationManager _navigationManager
+
+<h3>Mark</h3>
+
+
+@if (subStuMarks == null)
+{
+    <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+}
+else
+{
+    int stt = 0;
+      <div class="col-md-5 mx-auto">
+            <div class="input-group">
+                <input class="form-control border-end-0 border rounded-pill" type="search" value="search" id="example-search-input">
+                <span class="input-group-append">
+                    <button class="btn btn-outline-secondary bg-white border-bottom-0 border rounded-pill ms-n5" type="button">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th>Img</th>
+                <th>Tên</th>
+                <th>Môn học</th>
+                <th>Điểm</th>
+                <th>Giới tính</th>
+                <th>Trạng thái</th>
+                <th>Tùy chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var stu in subStuMarks)
+            {
+                <tr>
+                    <td>@(stt++)</td>
+                    <td><img src="@stu.Student.Image" alt="#Value" style="width: 10%; height: 15%" /></td>
+                    <td>@stu.Student.Name</td>
+                    <td>@stu.Subject.Name</td>
+                    <td>@stu.Mark.Scores</td>
+                    <td>
+                        @{
+                            if (stu.Student.Gender == 1)
+                            {
+                                        <p>Nam</p>
+                            }
+                            else
+                            {
+                                        <p>Nữ</p>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @{
+                            if (stu.Student.Status)
+                            {
+                                        <p>Hoạt động</p>
+                            }
+                            else
+                            {
+                                        <p>Nghỉ học</p>
+                            }
+                        }
+                    </td>
+                    <td>
+                        <div>
+                            <button type="button" class="btn btn-success" style="margin-right: 5px" data-bs-toggle="modal" data-bs-target="#update">Sửa</button>
+
+                            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete">Xóa</button>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>    
+    </table>   
+}
+
+@code {
+#nullable disable
+    public List<ViewSubStuMark> subStuMarks = new List<ViewSubStuMark>();
+    protected override async Task OnInitializedAsync()
+    {
+        //student  = await Http.GetFromJsonAsync<Student>("/api/Stu/find-student-by-id/{}");
+        subStuMarks = await Http.GetFromJsonAsync<List<ViewSubStuMark>>($"/api/Sub/get-all-subject");
+    }
+}
